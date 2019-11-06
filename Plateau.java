@@ -154,17 +154,18 @@ public class Plateau {
             calculVictory = this.puissance[this.colEnCours].get(hauteurList);
             int compteur = 3;
             for (int i = this.colEnCours + 1; i < this.puissance.length; i++) {
-                if (this.puissance[i].size() > hauteurList && !(this.puissance[i].isEmpty()) && i < this.colEnCours + 4) {
+                if (this.puissance[i].size() > hauteurList && !(this.puissance[i].isEmpty())
+                        && i < this.colEnCours + 4) {
                     if (this.puissance[i].get(hauteurList) == this.puissance[this.colEnCours].get(hauteurList)) {
-                        calculVictory += this.puissance[i].get(hauteurList); //verifie les cases vers la droite
+                        calculVictory += this.puissance[i].get(hauteurList); // verifie les cases vers la droite
                         compteur--;
                     } else {
                         break;
                     }
                 }
             }
-            if (this.colEnCours - compteur >= 0 && compteur > 0) {
-                for (int i = this.colEnCours - 1; i >= this.colEnCours - compteur; i--) {
+            for (int i = this.colEnCours - 1; i >= this.colEnCours - compteur; i--) {
+                if (i >= 0) {
                     if (this.puissance[i].size() > hauteurList && !(this.puissance[i].isEmpty())) {
                         calculVictory += this.puissance[i].get(hauteurList); // verifie les cases vers la gauche
                     }
@@ -208,21 +209,25 @@ public class Plateau {
             for (int i = this.colEnCours + 1; i < this.puissance.length; i++) {
                 if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty()) && j < hauteurList + 4) {
                     if (this.puissance[i].get(j) == this.puissance[this.colEnCours].get(hauteurList)) {
-                        calculVictory += this.puissance[i].get(j); //verifie les case en haut a droite de la precedente
+                        calculVictory += this.puissance[i].get(j); // verifie les case en haut a droite de la precedente
                         compteur--;
                         j++;
-                    } else {break;}
+                    } else {
+                        break;
+                    }
                 } else {
                     break;
                 }
             }
             j = hauteurList - 1;
-            if (this.colEnCours - compteur >= 0 && hauteurList - compteur >= 0 && compteur > 0) {
-                for (int i = this.colEnCours - 1; i >= this.colEnCours - compteur; i--) {
+            for (int i = this.colEnCours - 1; i >= this.colEnCours - compteur; i--) {
+                if (i >= 0 && j >= 0) {
                     if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
                         calculVictory += this.puissance[i].get(j); // verifie les case en bas a gauche de la precedente
                         j--;
                     }
+                } else {
+                    break;
                 }
             }
             if (calculVictory == 4 || calculVictory == 40) {
@@ -232,9 +237,9 @@ public class Plateau {
             compteur = 3;
             j = hauteurList - 1;
             for (int i = this.colEnCours + 1; i < this.puissance.length; i++) {
-                if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty()) && j > hauteurList - 4 && j >=0) {
+                if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty()) && j > hauteurList - 4 && j >= 0) {
                     if (this.puissance[i].get(j) == this.puissance[this.colEnCours].get(hauteurList)) {
-                        calculVictory += this.puissance[i].get(j); //verifie les case en bas a droite de la precedente
+                        calculVictory += this.puissance[i].get(j); // verifie les case en bas a droite de la precedente
                         compteur--;
                         j--;
                     }
@@ -242,18 +247,16 @@ public class Plateau {
                     break;
                 }
             }
-            if (this.colEnCours - compteur >= 0 && hauteurList + compteur < 6 && compteur > 0) {
             j = hauteurList + 1;
             for (int i = colEnCours - 1; i >= colEnCours - compteur; i--) {
-                //if (i >= 0 && j < 6) {
+                if (i >= 0 && j < 6) {
                     if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
-                        calculVictory += this.puissance[i].get(j); //verifie les case en haut a gauche de la precedente
+                        calculVictory += this.puissance[i].get(j); // verifie les case en haut a gauche de la precedente
                         j++;
                     }
-                //} else {
-                //    break;
-                //}
-            }
+                } else {
+                    break;
+                }
             }
             if (calculVictory == 4 || calculVictory == 40) {
                 return true;
@@ -295,7 +298,7 @@ public class Plateau {
             return tour > 9;
         case 3:
             if (this.pendu.getVieRestante() == 1) {
-                System.out.println("\nLe mot etait " + this.pendu.getMotATrouver()); //si echec a trouver le mot
+                System.out.println("\nLe mot etait " + this.pendu.getMotATrouver()); // si echec a trouver le mot
                 return true;
             }
             return false;
@@ -356,7 +359,7 @@ public class Plateau {
             }
             System.out.println("|   " + 7 + "   " + 8 + "   " + 9 + "\n-------------");
             break;
-        case 3 :
+        case 3:
             this.pendu.affichePendu();
             break;
         }
@@ -364,6 +367,7 @@ public class Plateau {
 
     /**
      * retourne la taille du plateau
+     * 
      * @return int egale a la taille du plateau
      */
     public int getTaillePlateau() {
@@ -376,36 +380,40 @@ public class Plateau {
             return 0;
         }
     }
-    
+
     /**
      * renvoi le plateau du puissance 4 pour l'ia
+     * 
      * @return retourne le plateau puissance 4
      */
-    public List<Integer>[] getPlateauP4(){
+    public List<Integer>[] getPlateauP4() {
         return this.puissance;
     }
 
     /**
      * renvoi le plateau du morpion pour l'ia
+     * 
      * @return retourne le plateau morpion
      */
-    public int[] getPlateauMorpion(){
+    public int[] getPlateauMorpion() {
         return this.morpion;
     }
 
     /**
      * retourne le dernier coup jouer
+     * 
      * @return retourne le dernier coup jouer
      */
-    public int getDernierCoup(){
+    public int getDernierCoup() {
         return this.dernierCoup;
     }
 
     /**
      * retourne la derniere colonne jouer
+     * 
      * @return retourne la derniere colonne jouer
      */
-    public int getColEnCours(){
+    public int getColEnCours() {
         return this.colEnCours;
     }
 }
