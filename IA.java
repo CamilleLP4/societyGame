@@ -190,7 +190,7 @@ public class IA{
                     if (this.puissance[i].size() > hauteurList) {
                         if (this.puissance[i].get(hauteurList) != this.puissance[this.derniereColonne].get(hauteurList)) {
                             System.out.println("break");
-                            continue;
+                            break;
                         }
                     } else {
                         System.out.println(this.puissance[i].size());
@@ -290,9 +290,35 @@ public class IA{
                     break;
                 }
             }
+            //ici
             if (calculVictory == 3 || calculVictory == 30) {
-                return true;
+                j = hauteurList + 1;
+                for (int i = this.derniereColonne + 1; i < this.puissance.length; i++) {
+                    if (this.puissance[i].size() > j && j < hauteurList + 4) {
+                        if (this.puissance[i].get(j) == this.puissance[this.derniereColonne].get(hauteurList)) {
+                            calculVictory += this.puissance[i].get(j); // verifie les case en haut a droite de la precedente
+                            compteur--;
+                            j++;
+                        } else {
+                            break;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+                j = hauteurList - 1;
+                for (int i = this.derniereColonne - 1; i >= this.derniereColonne - compteur; i--) {
+                    if (i >= 0 && j >= 0) {
+                        if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
+                            calculVictory += this.puissance[i].get(j); // verifie les case en bas a gauche de la precedente
+                            j--;
+                        }
+                    } else {
+                        break;
+                    }
+                }
             }
+            //la
             calculVictory = this.puissance[this.derniereColonne].get(hauteurList);
             compteur = 3;
             j = hauteurList - 1;
@@ -425,11 +451,15 @@ public class IA{
         test.tourDeJeu(3, 1, 'a');
         test.tourDeJeu(6, 10, 'a');
         test.tourDeJeu(4, 10, 'a');
-        test.tourDeJeu(5, 1, 'a');
+        test.tourDeJeu(5, 10, 'a');
         test.tourDeJeu(3, 1, 'a');
-        test.tourDeJeu(6, 10, 'a');
+        //test.tourDeJeu(6, 10, 'a');
         test.tourDeJeu(2, 10, 'a');
         test.tourDeJeu(2, 10, 'a');
+        test.tourDeJeu(2, 1, 'a');
+        test.tourDeJeu(2, 1, 'a');
+        test.tourDeJeu(1, 10, 'a');
+        test.tourDeJeu(1, 1, 'a');
         test.tourDeJeu(4, 1, 'a');
         System.out.println(ordi.coupIA(3, test.getPlateauP4(), test.getColEnCours()));
         System.out.println(test.getColEnCours());
