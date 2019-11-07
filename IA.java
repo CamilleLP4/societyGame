@@ -48,8 +48,12 @@ public class IA{
                 System.out.println("jeu enfant");
                 return this.randomP4();
             } else {
-                System.out.println("random");
-                return this.randomP4();
+                int retour = 0;
+                while (retour == 0) {
+                    System.out.println("random");
+                    retour = this.randomP4();
+                }
+                return retour;
             }
         }
     }
@@ -194,9 +198,10 @@ public class IA{
                             this.coupAJouer = i;
                             System.out.println("coup a jouer");
                             return true;
-                        } else if (this.puissance[i].size() - 1 == hauteurList){
+                        } else if (this.puissance[i].size() == hauteurList - 1){
                             System.out.println("coup interdit");
                             this.coupInterdit = i;
+                            System.out.println(this.coupInterdit);
                             return false;
                         }
                     }
@@ -213,9 +218,10 @@ public class IA{
                                 this.coupAJouer = i;
                                 System.out.println("coup a jouer retour");
                                 return true;
-                            } else if (this.puissance[i].size() - 1 == hauteurList){
+                            } else if (this.puissance[i].size() == hauteurList - 1){
                                 System.out.println("coup interdit retour");
                                 this.coupInterdit = i;
+                                System.out.println(this.coupInterdit);
                                 return false;
                             }
                         }
@@ -256,7 +262,66 @@ public class IA{
     public boolean diagonal(){
         int calculVictory = 0;
         if (this.typePlateau == 1) {
-            //a faire            
+            int hauteurList = this.puissance[this.derniereColonne].size() - 1;
+            calculVictory = this.puissance[this.derniereColonne].get(hauteurList);
+            int compteur = 3;
+            int j = hauteurList + 1;
+            for (int i = this.derniereColonne + 1; i < this.puissance.length; i++) {
+                if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty()) && j < hauteurList + 4) {
+                    if (this.puissance[i].get(j) == this.puissance[this.derniereColonne].get(hauteurList)) {
+                        calculVictory += this.puissance[i].get(j); // verifie les case en haut a droite de la precedente
+                        compteur--;
+                        j++;
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+            j = hauteurList - 1;
+            for (int i = this.derniereColonne - 1; i >= this.derniereColonne - compteur; i--) {
+                if (i >= 0 && j >= 0) {
+                    if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
+                        calculVictory += this.puissance[i].get(j); // verifie les case en bas a gauche de la precedente
+                        j--;
+                    }
+                } else {
+                    break;
+                }
+            }
+            if (calculVictory == 3 || calculVictory == 30) {
+                return true;
+            }
+            calculVictory = this.puissance[this.derniereColonne].get(hauteurList);
+            compteur = 3;
+            j = hauteurList - 1;
+            for (int i = this.derniereColonne + 1; i < this.puissance.length; i++) {
+                if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty()) && j > hauteurList - 4 && j >= 0) {
+                    if (this.puissance[i].get(j) == this.puissance[this.derniereColonne].get(hauteurList)) {
+                        calculVictory += this.puissance[i].get(j); // verifie les case en bas a droite de la precedente
+                        compteur--;
+                        j--;
+                    }
+                } else {
+                    break;
+                }
+            }
+            j = hauteurList + 1;
+            for (int i = derniereColonne - 1; i >= derniereColonne - compteur; i--) {
+                if (i >= 0 && j < 6) {
+                    if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
+                        calculVictory += this.puissance[i].get(j); // verifie les case en haut a gauche de la precedente
+                        j++;
+                    }
+                } else {
+                    break;
+                }
+            }
+            if (calculVictory == 4 || calculVictory == 40) {
+                return true;
+            }
+            return false;            
         } else if (this.typePlateau == 2){
             for (int i = 0; i < 9; i += 4) {
                 calculVictory += this.morpion[i];
@@ -322,36 +387,50 @@ public class IA{
      */
     public int randomP4(){
         int randomP4 = (int)(Math.random() * (100-1)) + 1;
- 
+        int retour;
         if(randomP4 < 12){ // 11% de renvoyé 1
-            return 1;
+            retour = 1;
         } else if(randomP4 < 26){ // 14% de renvoyé 2
-            return 2;
+            retour = 2;
         } else if(randomP4 < 42){ // 16% de renvoyé 3
-            return 3;
+            retour = 3;
         } else if(randomP4 < 60){ // 18% de renvoyé 4
-            return 4;
+            retour = 4;
         } else if(randomP4 < 76){ // 16% de renvoyé 5
-            return 5;
+            retour = 5;
         } else if(randomP4 < 90){ // 14% de renvoyé 6
-            return 6;
+            retour = 6;
         } else { // 11% de renvoyé 7
-            return 7;
+            retour = 7;
+        }
+        if (retour == this.coupInterdit){
+            return 0;
+        } else {
+            return retour;
         }
     }
 
     public static void main(String[] args) throws IOException {
         Plateau test = new Plateau(1);
         IA ordi = new IA(1);
-        test.tourDeJeu(2, 1, 'a');
-        test.tourDeJeu(3, 1, 'a');
-        test.tourDeJeu(6, 10, 'a');
-        test.tourDeJeu(5, 1, 'a');
-        test.tourDeJeu(2, 1, 'a');
+        test.tourDeJeu(5, 10, 'a');
         test.tourDeJeu(3, 1, 'a');
         test.tourDeJeu(6, 10, 'a');
         test.tourDeJeu(4, 10, 'a');
         test.tourDeJeu(5, 1, 'a');
+        test.tourDeJeu(3, 10, 'a');
+        test.tourDeJeu(6, 1, 'a');
+        test.tourDeJeu(4, 1, 'a');
+        test.tourDeJeu(5, 10, 'a');
+        test.tourDeJeu(3, 1, 'a');
+        test.tourDeJeu(6, 10, 'a');
+        test.tourDeJeu(4, 10, 'a');
+        test.tourDeJeu(5, 1, 'a');
+        test.tourDeJeu(3, 1, 'a');
+        test.tourDeJeu(6, 10, 'a');
+        test.tourDeJeu(2, 10, 'a');
+        test.tourDeJeu(2, 10, 'a');
+        test.tourDeJeu(4, 1, 'a');
         System.out.println(ordi.coupIA(3, test.getPlateauP4(), test.getColEnCours()));
         System.out.println(test.getColEnCours());
     }
