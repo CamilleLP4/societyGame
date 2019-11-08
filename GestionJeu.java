@@ -136,12 +136,15 @@ public class GestionJeu {
 
     /**
      * Methode gerant la partie remplissage du plateau avec les saisies joueurs
+     * 
+     * @throws InterruptedException
      */
-    private void chacunSonTour() {
+    private void chacunSonTour() throws InterruptedException {
         int choixInt;
         String choix = "";
         boolean valid = false;
         if (this.typePlateau < 3) {
+            System.out.println("tour" + this.tour);
             System.out.println(
                     "Au tour de " + this.tourJeu[this.tour % 2] + "\nChoix entre 1 et " + this.plateau.getTaillePlateau());
             while (!valid) {
@@ -185,7 +188,7 @@ public class GestionJeu {
             }
         }
     }
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         saisie = new Scanner(System.in);
         System.out.println("Bienvenue sur votre console de jeu");
         boolean play = true;
