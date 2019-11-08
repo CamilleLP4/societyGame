@@ -209,7 +209,7 @@ public class Plateau {
             for (int i = this.colEnCours + 1; i < this.puissance.length; i++) {
                 if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty()) && j < hauteurList + 4) {
                     if (this.puissance[i].get(j) == this.puissance[this.colEnCours].get(hauteurList)) {
-                        calculVictory += this.puissance[i].get(j); // verifie les case en haut a droite de la precedente
+                        calculVictory += this.puissance[i].get(j); // verifie les cases en haut a droite de la precedente
                         compteur--;
                         j++;
                     } else {
@@ -223,7 +223,7 @@ public class Plateau {
             for (int i = this.colEnCours - 1; i >= this.colEnCours - compteur; i--) {
                 if (i >= 0 && j >= 0) {
                     if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
-                        calculVictory += this.puissance[i].get(j); // verifie les case en bas a gauche de la precedente
+                        calculVictory += this.puissance[i].get(j); // verifie les cases en bas a gauche de la precedente
                         j--;
                     }
                 } else {
@@ -239,9 +239,11 @@ public class Plateau {
             for (int i = this.colEnCours + 1; i < this.puissance.length; i++) {
                 if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty()) && j > hauteurList - 4 && j >= 0) {
                     if (this.puissance[i].get(j) == this.puissance[this.colEnCours].get(hauteurList)) {
-                        calculVictory += this.puissance[i].get(j); // verifie les case en bas a droite de la precedente
+                        calculVictory += this.puissance[i].get(j); // verifie les cases en bas a droite de la precedente
                         compteur--;
                         j--;
+                    } else {
+                        break;
                     }
                 } else {
                     break;
@@ -251,7 +253,7 @@ public class Plateau {
             for (int i = colEnCours - 1; i >= colEnCours - compteur; i--) {
                 if (i >= 0 && j < 6) {
                     if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
-                        calculVictory += this.puissance[i].get(j); // verifie les case en haut a gauche de la precedente
+                        calculVictory += this.puissance[i].get(j); // verifie les cases en haut a gauche de la precedente
                         j++;
                     }
                 } else {
