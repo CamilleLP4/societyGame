@@ -4,7 +4,8 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Projet java créer un jeu de plateau en java
+ * Projet java creer un jeu de plateau en java
+ * Class gerant le pendu
  * 
  * @author Camille Paudrat LP4 30/10/19 Une classe qui gere le pendu.
  */
@@ -31,7 +32,7 @@ public class Pendu {
      * @throws IOException necessaire pour lire mots.txt
      */
     public Pendu() throws IOException {
-        String fileName = "mots.txt"; //fonctionne en CMD remplacer par "societyGame\\mots.txt" pour VSCode
+        String fileName = "mots.txt";
         List<String> listDeMots = Files.readAllLines(Paths.get(fileName)); //rempli la liste en lisant le fichier
         int numMot = (int)(Math.random() * listDeMots.size());
         this.leMotATrouver = listDeMots.get(numMot); //extrait le mot choisi au hasard
@@ -43,9 +44,9 @@ public class Pendu {
     }
 
     /**
-     * Compare le caractere du joueur avec le mot a trouvé et met a jour le tableau afficher au joueur
+     * Compare le caractere du joueur avec le mot a trouve et met a jour le tableau afficher au joueur
      * @param ch caractere du joueur
-     * @return return true si tout se passe bien sinon false si le caractere est deja joué
+     * @return return true si tout se passe bien sinon false si le caractere est deja joue
      */
     public boolean compare(Character ch){
         Character comp = Character.toUpperCase(ch); //transforme le caractere en majuscule
@@ -66,14 +67,14 @@ public class Pendu {
         if (echec == 1) {
             for (int i = 0;i < this.tabDejaJouer.length; i++) {
                 if (Character.isWhitespace(this.tabDejaJouer[i])) { 
-                    this.tabDejaJouer[i] = comp; //rempli le debut du tableau des mauvaises lettres deja joué
+                    this.tabDejaJouer[i] = comp; //rempli le debut du tableau des mauvaises lettres deja joue
                     return true;
                 }
             }
         } else {
             for (int i = this.tabDejaJouer.length - 1; i >= 0; i--) {
                 if (Character.isWhitespace(this.tabDejaJouer[i])) {
-                    this.tabDejaJouer[i] = comp; //rempli la fin du tableau des bonnes lettres deja joué
+                    this.tabDejaJouer[i] = comp; //rempli la fin du tableau des bonnes lettres deja joue
                     return true;
                 }
             } 
@@ -82,7 +83,7 @@ public class Pendu {
     }
 
     /**
-     * compare le mot a trouver et le mot présenté au joueur
+     * compare le mot a trouver et le mot presente au joueur
      * @return true si les mots sont egaux sinon false pour pas egaux
      */
     public boolean verifChaine(){
@@ -94,7 +95,7 @@ public class Pendu {
     }
 
     /**
-     * renvoie le nombre de vie du joueur
+     * renvoi le nombre de vie du joueur
      * @return renvoi un entier egal au nombres de vies restantes
      */
     public int getVieRestante(){
@@ -110,7 +111,7 @@ public class Pendu {
     }
 
     /**
-     * affiche le mot coté joueur suivi des lettres deja joués et le dessin du pendu
+     * affiche le mot cote joueur suivi des lettres deja joues et le dessin du pendu
      */
     public void affichePendu(){
         System.out.println(this.dessinPendu[12 - this.compteurVie]);
