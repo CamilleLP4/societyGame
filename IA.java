@@ -1,6 +1,11 @@
 import java.util.List;
-import java.io.IOException;
 
+/**
+ * Projet java creer un jeu de plateau en java
+ * Class gerant l'IA Morpion et Puissance 4
+ * 
+ * @author Camille Paudrat LP4 4/11/19 Une classe qui gere l'IA.
+ */
 public class IA {
     // Variables
     private int typePlateau;
@@ -20,8 +25,8 @@ public class IA {
     }
 
     /**
-     * Methode récuperant les informations du jeu puissance 4 pour etre traité et
-     * renvoyé le coup a jouer
+     * recupere les informations du jeu puissance 4 pour etre traite et renvoi le
+     * coup a jouer
      * 
      * @param tour            entier tour en cours
      * @param puissance       tableau de List d'entier est l'etat actuel du plateau
@@ -32,29 +37,26 @@ public class IA {
     public int coupIA(int tour, List<Integer>[] puissance, int derniereColonne) throws InterruptedException {
         this.puissance = puissance;
         this.derniereColonne = derniereColonne;
-        Thread.sleep(1000);
+        Thread.sleep(1000); // temps d'arret d'une seconde
         if (tour == 1) {
-            return 4;
+            return 4; // joue au centre si premier tour
         } else if (tour < 4) {
-            return this.randomP4();
+            return this.randomP4(); // joue aleatoire
         } else {
             if (this.verifPlateau()) {
-                System.out.println("retour valid");
-                return this.coupAJouer + 1;
+                return this.coupAJouer + 1; // joue pour bloquer le joueur
             }
             if (this.puissance[this.derniereColonne].size() < 6 && this.derniereColonne + 1 != this.coupInterdit) {
-                System.out.println("jeu enfant");
-                return this.derniereColonne + 1;
+                return this.derniereColonne + 1; // joue la meme colonne que le joueur
             } else {
-                System.out.println("random");
-                return this.randomP4();
+                return this.randomP4(); // joue aleatoire
             }
         }
     }
 
     /**
-     * Methode récuperant les informations du jeu Morpion pour etre traité et
-     * renvoyé le coup a jouer
+     * recupere les informations du jeu Morpion pour etre traite et renvoi le coup a
+     * jouer
      * 
      * @param tour            entier tour en cours
      * @param morpion         tableau d'entiers representant l'etat actuel du
@@ -67,9 +69,9 @@ public class IA {
         this.morpion = morpion;
         boolean ok = false;
         int coup = -1;
-        Thread.sleep(1000);
+        Thread.sleep(1000); // arret d'une seconde
         if (tour < 3) {
-            if (this.morpion[4] == 0) {
+            if (this.morpion[4] == 0) { // si centre vide
                 this.enregistrementCoup(5);
                 pionIA = 10;
                 return 5;
@@ -84,7 +86,7 @@ public class IA {
             }
         } else {
             this.enregistrementCoup(dernierCoup + 1);
-            if (this.verifPlateau()) {
+            if (this.verifPlateau()) { // verifie si un joueur est a 1 pion de la victoire
                 this.enregistrementCoup(this.coupAJouer + 1);
                 return this.coupAJouer + 1;
             } else {
@@ -115,7 +117,7 @@ public class IA {
     public boolean vertical() {
         int calculVictory;
         int position = -1;
-        if (this.typePlateau == 1) {
+        if (this.typePlateau == 1) { // puissance 4
             calculVictory = 0;
             int tailleLi = this.puissance[this.derniereColonne].size() - 1;
             if (tailleLi > 1 && !(this.puissance[this.derniereColonne].isEmpty())) {
@@ -128,22 +130,23 @@ public class IA {
                 return true;
             }
             return false;
-        } else if (this.typePlateau == 2) {
+        } else if (this.typePlateau == 2) { // morpion
             for (int i = 0; i < 3; i++) {
                 calculVictory = 0;
                 for (int j = i; j <= i + 7; j += 3) {
                     calculVictory += this.morpion[j];
                 }
-                if (calculVictory == pionIA * 2) {
-                    position = i;
+                if (calculVictory == pionIA * 2) { // si IA proche de la victoire
+                    position = i; // colonne proche de la victoire
                     break;
                 } else if (calculVictory == 2 || calculVictory == 20) {
-                    position = i;
+                    position = i; // colonne proche de la victoire
                     break;
                 }
             }
             if (position >= 0) {
-                for (int i = position; i < position + 7; i += 3) {
+                for (int i = position; i < position + 7; i += 3) { // test la colonne proche de la victoire pour
+                                                                   // determiner la case a jouer
                     if (this.morpion[i] == 0) {
                         this.coupAJouer = i;
                         return true;
@@ -162,72 +165,69 @@ public class IA {
     public boolean horizon() {
         int calculVictory;
         int position = -1;
-        if (this.typePlateau == 1) {
+        if (this.typePlateau == 1) { // puissance 4
             int hauteurList = this.puissance[this.derniereColonne].size() - 1;
             calculVictory = this.puissance[this.derniereColonne].get(hauteurList);
             int compteur = 3;
             for (int i = this.derniereColonne + 1; i < this.puissance.length; i++) {
                 if (this.puissance[i].size() > hauteurList && i < this.derniereColonne + 4) {
-                    if (this.puissance[i].get(hauteurList) == this.puissance[this.derniereColonne].get(hauteurList)) {
+                    if (this.puissance[i].get(hauteurList) == this.puissance[this.derniereColonne].get(hauteurList)
+                            && position == -1) {
                         calculVictory += this.puissance[i].get(hauteurList); // verifie les cases vers la droite
                         compteur--;
                     } else {
-                        break;
+                        break; // si pion different arret de la boucle
                     }
                 } else {
                     if (position != -1) {
-                        break;
+                        break; // si case vide deja enregistre
                     }
-                    position = i;
+                    position = i; // enregistre la colonne vide
                 }
             }
             for (int i = this.derniereColonne - 1; i >= this.derniereColonne - compteur; i--) {
                 if (i >= 0) {
-                    if (this.puissance[i].size() > hauteurList && !(this.puissance[i].isEmpty())) {
+                    if (this.puissance[i].size() > hauteurList) {
                         if (this.puissance[i].get(hauteurList) == this.puissance[this.derniereColonne]
                                 .get(hauteurList)) {
                             calculVictory += this.puissance[i].get(hauteurList); // verifie les cases vers la gauche
                         } else {
-                            break;
+                            break; // si pion different arret de la boucle
                         }
                     } else {
                         if (position != -1) {
-                            break;
+                            break; // si case vide deja enregistre
                         }
-                        position = i;
+                        position = i; // enregistre la colonne vide
                     }
                 }
             }
-            System.out.println("victory ho " + calculVictory);
             if ((calculVictory == 3 || calculVictory == 30) && position != -1) {
                 if (this.puissance[position].size() == hauteurList) {
-                    this.coupAJouer = position;
-                    System.out.println("coup a jouer ho");
-
+                    this.coupAJouer = position; // colonne a jouer
                     return true;
                 } else if (this.puissance[position].size() == hauteurList - 1) {
-                    this.coupInterdit = position;
-                    System.out.println("coup interdit ho");
+                    this.coupInterdit = position; // colonne a ne pas jouer
                     return false;
                 }
             }
             return false;
-        } else if (this.typePlateau == 2) {
+        } else if (this.typePlateau == 2) { // morpion
             for (int i = 0; i < 7; i += 3) {
                 calculVictory = 0;
                 for (int j = i; j < i + 3; j++) {
                     calculVictory += this.morpion[j];
                 }
-                if (calculVictory == pionIA * 2) {
-                    position = i;
+                if (calculVictory == pionIA * 2) { // si ia proche de la victoire
+                    position = i; // colonne proche de la victoire
                     break;
                 } else if (calculVictory == 2 || calculVictory == 20) {
-                    position = i;
+                    position = i; // colonne proche de la victoire
                     break;
                 }
             }
             if (position >= 0) {
-                for (int i = position; i < position + 3; i++) {
+                for (int i = position; i < position + 3; i++) { // test la ligne et enregistre la case a jouer
                     if (this.morpion[i] == 0) {
                         this.coupAJouer = i;
                         return true;
@@ -239,7 +239,7 @@ public class IA {
     }
 
     /**
-     * verifie sur la diagonal si un joueur est proche de la victoire
+     * verifie sur les diagonales si un joueur est proche de la victoire
      * 
      * @return true si proche de la victoire sinon false
      */
@@ -247,58 +247,56 @@ public class IA {
         int calculVictory = 0;
         int position = -1;
         int hauteur = -1;
-        if (this.typePlateau == 1) {
+        if (this.typePlateau == 1) { // puissance 4
             int hauteurList = this.puissance[this.derniereColonne].size() - 1;
             calculVictory = this.puissance[this.derniereColonne].get(hauteurList);
             int compteur = 3;
             int j = hauteurList + 1;
             for (int i = this.derniereColonne + 1; i < this.puissance.length; i++) {
                 if (this.puissance[i].size() > j && j < 6) {
-                    if (this.puissance[i].get(j) == this.puissance[this.derniereColonne].get(hauteurList)) {
+                    if (this.puissance[i].get(j) == this.puissance[this.derniereColonne].get(hauteurList)
+                            && position == -1) {
                         calculVictory += this.puissance[i].get(j); // verifie les cases en haut a droite de la
                                                                    // precedente
                         compteur--;
                     } else {
-                        break;
+                        break; // si pion different arret de la boucle
                     }
                 } else {
                     if (position != -1) {
-                        break;
+                        break; // si case vide deja enregistre
                     }
-                    position = i;
+                    position = i; // enregistre les coordonnées de la case vide
                     hauteur = j;
                 }
                 j++;
             }
             j = hauteurList - 1;
             for (int i = this.derniereColonne - 1; i >= this.derniereColonne - compteur; i--) {
-                if (i >= 0 && j >= 0) {
-                    if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
+                if (i >= 0 && j >= 0) { // si dans les limites du puissance 4
+                    if (this.puissance[i].size() > j) {
                         if (this.puissance[i].get(j) == this.puissance[this.derniereColonne].get(hauteurList)) {
                             calculVictory += this.puissance[i].get(j); // verifie les cases en bas a gauche de la
                                                                        // precedente
                         } else {
-                            break;
+                            break; // si pion different arret de la boucle
                         }
                     } else {
-                        position = i;
+                        position = i; // enregistre les coordonnées de la case vide
                         hauteur = j;
                     }
                 } else {
-                    break;
+                    break; // si hors tableau arret de la boucle
                 }
                 j--;
             }
-            System.out.println("victory diag 1" + calculVictory);
-            if ((calculVictory == 3 || calculVictory == 30) && position != -1) {
+            if ((calculVictory == 3 || calculVictory == 30) && position != -1) { // si proche victoire et case vide
+                                                                                 // trouve
                 if (this.puissance[position].size() == hauteur) {
-                    this.coupAJouer = position;
-                    System.out.println("coup a jouer diag 1");
+                    this.coupAJouer = position; // coup a jouer
                     return true;
                 } else if (this.puissance[position].size() == hauteur - 1) {
-                    System.out.println("coup interditdiag 1");
-                    this.coupInterdit = position;
-                    System.out.println(this.coupInterdit);
+                    this.coupInterdit = position; // coup a ne pas jouer
                     return false;
                 }
             }
@@ -307,87 +305,85 @@ public class IA {
             position = -1;
             j = hauteurList - 1;
             for (int i = this.derniereColonne + 1; i < this.puissance.length; i++) {
-                if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty()) && j > hauteurList - 4 && j >= 0) {
-                    if (this.puissance[i].get(j) == this.puissance[this.derniereColonne].get(hauteurList)) {
+                if (this.puissance[i].size() > j && j > hauteurList - 4 && j >= 0) {
+                    if (this.puissance[i].get(j) == this.puissance[this.derniereColonne].get(hauteurList)
+                            && position == -1) {
                         calculVictory += this.puissance[i].get(j); // verifie les cases en bas a droite de la precedente
                         compteur--;
                     } else {
-                        break;
+                        break; // si pion different arret de la boucle
                     }
                 } else {
                     if (position != -1) {
-                        break;
+                        break; // si case vide deja enregistre
                     }
-                    position = i;
+                    position = i; // enregistre les coordonnées de la case vide
                     hauteur = j;
                 }
                 j--;
             }
             j = hauteurList + 1;
-            for (int i = derniereColonne - 1; i >= derniereColonne - compteur; i--) {
-                if (i >= 0 && j < 6) {
-                    if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
+            for (int i = this.derniereColonne - 1; i >= this.derniereColonne - compteur; i--) {
+                if (i >= 0 && j < 6) { // si dans les limites du plateau
+                    if (this.puissance[i].size() > j) {
                         if (this.puissance[i].get(j) == this.puissance[this.derniereColonne].get(hauteurList)) {
                             calculVictory += this.puissance[i].get(j); // verifie les cases en haut a gauche de la
                                                                        // precedente
                         } else {
-                            break;
+                            break; // si pion different arret de la boucle
                         }
                     } else {
-                        position = i;
+                        position = i; // enregistre les coordonnées de la case vide
                         hauteur = j;
                     }
                     j++;
                 } else {
-                    break;
+                    break; // si hors tableau arret de la boucle
                 }
             }
-            System.out.println("victory diag 2" + calculVictory);
-            if ((calculVictory == 3 || calculVictory == 30) && position != -1) {
+            if ((calculVictory == 3 || calculVictory == 30) && position != -1) { // si proche victoire et case vide
+                                                                                 // trouve
                 if (this.puissance[position].size() == hauteur) {
-                    this.coupAJouer = position;
-                    System.out.println("coup a jouer diag 2");
+                    this.coupAJouer = position; // coup a jouer
                     return true;
                 } else if (this.puissance[position].size() == hauteur - 1) {
-                    System.out.println("coup interditdiag 2");
-                    this.coupInterdit = position;
-                    System.out.println(this.coupInterdit);
+                    this.coupInterdit = position; // coup a ne pas jouer
                     return false;
                 }
             }
             return false;
-        } else if (this.typePlateau == 2) {
-            for (int i = 0; i < 9; i += 4) {
+        } else if (this.typePlateau == 2) { // morpion
+            for (int i = 0; i < 9; i += 4) { // diagonale gauche/haut bas/droite
                 calculVictory += this.morpion[i];
-                if (calculVictory == pionIA * 2) {
+                if (calculVictory == pionIA * 2) { // si ia proche victoire
                     for (int j = 0; j < 9; j += 4) {
                         if (this.morpion[j] == 0) {
-                            this.coupAJouer = j;
+                            this.coupAJouer = j; // coup a jouer
                             return true;
                         }
                     }
-                } else if (calculVictory == 2 || calculVictory == 20) {
+                } else if (calculVictory == 2 || calculVictory == 20) { // si joueur proche victoire
                     for (int j = 0; j < 9; j += 4) {
                         if (this.morpion[j] == 0) {
-                            this.coupAJouer = j;
+                            this.coupAJouer = j; // coup a jouer
                             return true;
                         }
                     }
                 }
             }
-            for (int i = 2; i < 7; i += 2) {
+            for (int i = 2; i < 7; i += 2) { // diagonale droite/haut bas/gauche
                 calculVictory += this.morpion[i];
-                if (calculVictory == pionIA * 2) {
+                if (calculVictory == pionIA * 2) { // si ia proche victoire
                     for (int j = 2; j < 7; j += 2) {
                         if (this.morpion[j] == 0) {
-                            this.coupAJouer = j;
+                            this.coupAJouer = j; // coup a jouer
                             return true;
                         }
                     }
-                } else if (calculVictory == 2 || calculVictory == 20) {
+                } else if (calculVictory == 2 || calculVictory == 20) { // si joueur proche victoire
                     for (int j = 2; j < 7; j += 2) {
                         if (this.morpion[j] == 0) {
-                            this.coupAJouer = j;
+                            this.coupAJouer = j; // coup a jouer
                             return true;
                         }
                     }
@@ -398,17 +394,17 @@ public class IA {
     }
 
     /**
-     * enregistre les coups joués au morpion
+     * enregistre les coups joues au morpion
      * 
      * @param coup un entier le coup a enregistrer
-     * @return true si le coup n'est pas deja et enregistré sinon false
+     * @return true si le coup est enregistre sinon false si deja enregistre
      */
     public boolean enregistrementCoup(int coup) {
         for (int i = 0; i < 9; i++) {
-            if (this.coupMorpion[i] == coup) {
+            if (this.coupMorpion[i] == coup) { // compare le tableau avec le coup joue
                 return false;
             }
-            if (this.coupMorpion[i] == 10) {
+            if (this.coupMorpion[i] == 10) { // parcourt le tableau jusqu'a trouver 10 pour le remplacer
                 this.coupMorpion[i] = coup;
                 return true;
             }
@@ -417,78 +413,43 @@ public class IA {
     }
 
     /**
-     * random avec des pourcentages de chances pour le puissance 4
+     * random avec des pourcentages de chances pour le puissance 4 et verifie si le
+     * coup est possible
      * 
-     * @return
+     * @return retourne le coup a jouer
+     * @throws InterruptedException
      */
-    public int randomP4() {
+    public int randomP4() throws InterruptedException {
         int retour = 10;
         int randomP4;
         int tentative = 7;
         while (retour == 10) {
             randomP4 = (int) (Math.random() * (100 - 1)) + 1;
-            if (randomP4 < 12) { // 11% de renvoyé 1
+            if (randomP4 < 12) { // 11% de renvoye 1
                 retour = 1;
-            } else if (randomP4 < 26) { // 14% de renvoyé 2
+            } else if (randomP4 < 26) { // 14% de renvoye 2
                 retour = 2;
-            } else if (randomP4 < 42) { // 16% de renvoyé 3
+            } else if (randomP4 < 42) { // 16% de renvoye 3
                 retour = 3;
-            } else if (randomP4 < 60) { // 18% de renvoyé 4
+            } else if (randomP4 < 60) { // 18% de renvoye 4
                 retour = 4;
-            } else if (randomP4 < 76) { // 16% de renvoyé 5
+            } else if (randomP4 < 76) { // 16% de renvoye 5
                 retour = 5;
-            } else if (randomP4 < 90) { // 14% de renvoyé 6
+            } else if (randomP4 < 90) { // 14% de renvoye 6
                 retour = 6;
-            } else { // 11% de renvoyé 7
+            } else { // 11% de renvoye 7
                 retour = 7;
             }
-            if (tentative != 0 && retour - 1 == this.coupInterdit) {
+            if (tentative > 0 && retour - 1 == this.coupInterdit) { // rend possible au bout de 7 essais de jouer le
+                                                                    // coup interdit
                 retour = 10;
             } else {
-                if (this.puissance[retour - 1].size() > 5) {
+                if (this.puissance[retour - 1].size() > 5) { // verifie si la colonne n'est pas deja pleine
                     retour = 10;
                 }
             }
             tentative--;
         }
         return retour;
-    }
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-        Plateau test = new Plateau(1);
-        IA ordi = new IA(1);
-
-        test.tourDeJeu(4, 10, 'a');
-        test.tourDeJeu(4, 1, 'a');
-        test.tourDeJeu(1, 10, 'a');
-        test.tourDeJeu(2, 1, 'a');
-        test.tourDeJeu(1, 1, 'a');
-        test.tourDeJeu(2, 1, 'a');
-        /*
-         * test.tourDeJeu(3, 10, 'a'); test.tourDeJeu(4, 1, 'a'); test.tourDeJeu(3, 10,
-         * 'a'); test.tourDeJeu(2, 1, 'a'); test.tourDeJeu(3, 10, 'a');
-         * test.tourDeJeu(6, 1, 'a'); test.tourDeJeu(6, 1, 'a'); test.tourDeJeu(3, 1,
-         * 'a'); test.tourDeJeu(5, 1, 'a'); test.tourDeJeu(3, 1, 'a'); test.tourDeJeu(4,
-         * 1, 'a'); test.tourDeJeu(6, 10, 'a');
-         * 
-         * test.tourDeJeu(5, 10, 'a'); test.tourDeJeu(5, 1, 'a');
-         */
-        // test.tourDeJeu(2, 10, 'a');
-        // test.tourDeJeu(4, 1, 'a');
-        // test.tourDeJeu(2, 10, 'a');
-        // test.tourDeJeu(2, 10, 'a');
-        // test.tourDeJeu(1, 10, 'a');
-        // test.tourDeJeu(1, 1, 'a');
-        // test.tourDeJeu(5, 10, 'a');
-        // test.tourDeJeu(1, 10, 'a');
-        // test.tourDeJeu(4, 1, 'a');
-        // test.tourDeJeu(4, 10, 'a');
-        // test.tourDeJeu(1, 1, 'a');
-        // test.tourDeJeu(2, 10, 'a');
-        System.out.println(ordi.coupIA(7, test.getPlateauP4(), test.getColEnCours()));
-        // test.tourDeJeu(1, 1, 'a');
-        // System.out.println(ordi.coupIA(3, test.getPlateauP4(),
-        // test.getColEnCours()));
-        System.out.println(test.getColEnCours());
     }
 }
