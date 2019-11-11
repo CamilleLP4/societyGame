@@ -1,4 +1,4 @@
-# Plateforme de jeux
+# Plateforme de jeux
 
 Auteur : Camille
 
@@ -8,15 +8,15 @@ Contexte : Projet Java 2 Faire un plateau de jeu
 
 Développé en Java
 
-## Description générale
+## Description générale
 
-### La Plateforme permet de jouer à différents jeux.
+### La Plateforme permet de jouer à différents jeux.
 
 ![](https://zupimages.net/up/19/46/ogto.png)
 
 Les jeux se déroulent dans la console.
 
-### 1 Puissance 4
+### 1 Puissance 4
 
 ![](https://zupimages.net/up/19/46/ftj6.png)
 
@@ -25,14 +25,14 @@ Le Puissance 4 se joue Joueur contre Joueur ou Joueur contre Ordinate
 Le but du jeu est d'aligner 4 pions identiques d'affilés.
 Il est possible de gagner en les alignant en verticale, horizontale et diagonale
 
-### 2 Morpion
+### 2 Morpion
 
 ![](https://zupimages.net/up/19/46/e5cu.png)
 
 Le Morpion se joue Joueur contre Joueur ou Joueur contre Ordinateur (Ordinateur contre Ordinateur).
 Le but du jeu est d'aligner 3 pions identique d'affilés. Il est possible de gagner en les alignant en verticale, horizontale et diagonale
 
-### 3 Pendu
+### 3 Pendu
 
 ![](https://zupimages.net/up/19/46/qfve.png)
 
@@ -40,11 +40,11 @@ Le Pendu se joue en solo.
 Le but du jeu est de trouver le Mot.
 Pour cela le joueur dispose de 12 lettres erronés.
 
-## Description des Classes
+## Description des Classes
 
 La plateforme est constitué de 4 Classes.
 
-### Classe GestionJeu
+### Classe GestionJeu
 
 Classe principale de la Plateforme.
 
@@ -52,7 +52,7 @@ Elle gère le menu, la gestion général du jeu et l'appel aux autre
 
 Sélectionne le jeu, initialise les joueurs, gère les entrées du joueur et vérifie les conditions de victoire.
 
-### Classe Plateau
+### Classe Plateau
 
 Classe initialisant les différents plateau de jeu.
 
@@ -60,17 +60,31 @@ Elle gère complètement les plateaux Puissance 4 et Morpion. Crée le
 
 Elle fait appel à la Classe Pendu pour le gestion du pendu.
 
-### Classe Pendu
+### Classe Pendu
 
 Classe gérant le Pendu.
 
 Elle gère les lettres entrées par le joueur, met à jour le mot si nécessaire, vérifie les conditions de victoire et affiche le Pendu.
 
-### Classe IA
+La Classe doit rester accompagné du fichier texte Mots.txt
+
+### Classe IA
 
 Classe gérant l'IA du Puissance 4 et du Morpion.
 
 Elle analyse le plateau de jeu et détermine si un coup empêchant le joueur de gagner est à jouer sinon elle joue au hasard.
+
+## Notice
+
+Pour jouer il faut faire un Run sur la Classe GestionJeu avec un IDE ou compilé la classe GestionJeu.
+
+Le Puissance 4 et le Morpion n'acceptent en saisie que les chiffres, tous les autres genère un message d'erreur.
+
+Le Pendu n'accepte en saisie que les lettres, tous les autres genère un message d'erreur.
+
+## Algorithme de base
+
+![](https://zupimages.net/up/19/46/bsiu.jpg)
 
 ## Evolution future
 
