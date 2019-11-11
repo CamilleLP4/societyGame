@@ -100,92 +100,11 @@ public class Plateau {
      * @return true si l'une des conditions de victoire est true sinon false
      */
     public boolean verifVictoire() {
-        return this.verifVertical() || this.verifHorizontal() || this.verifDiagonal();
-    }
-
-    /**
-     * verifie les colonnes pour voir si la condition de victoire est atteinte
-     * 
-     * @return true si une colonne correspond sinon false
-     */
-    private boolean verifVertical() {
-        int calculVictory;
         switch (this.typePlateau) {
         case 1:
-            calculVictory = 0;
-            int tailleLi = this.puissance[colEnCours].size() - 1;
-            if (tailleLi > 2 && !(this.puissance[colEnCours].isEmpty())) {
-                for (int i = tailleLi; i >= tailleLi - 3; i--) {
-                    calculVictory += this.puissance[colEnCours].get(i);
-                }
-            }
-            if (calculVictory == 4 || calculVictory == 40) {
-                return true;
-            }
-            return false;
+            return this.verifVertical() || this.verifHorizontal() || this.verifDiagonal();
         case 2:
-            for (int i = 0; i < 3; i++) {
-                calculVictory = 0;
-                for (int j = i; j <= i + 7; j += 3) {
-                    calculVictory += this.morpion[j];
-                }
-                if (calculVictory == 3 || calculVictory == 30) {
-                    return true;
-                }
-            }
-            return false;
-        case 3:
-            return false;
-        default:
-            return false;
-        }
-    }
-
-    /**
-     * verifie les lignes pour voir si la condition de victoire est atteinte
-     * 
-     * @return true si une ligne correspond sinon false
-     */
-    private boolean verifHorizontal() {
-        int calculVictory;
-        switch (this.typePlateau) {
-        case 1:
-            int hauteurList = this.puissance[this.colEnCours].size() - 1;
-            calculVictory = this.puissance[this.colEnCours].get(hauteurList);
-            int compteur = 3;
-            for (int i = this.colEnCours + 1; i < this.puissance.length; i++) {
-                if (this.puissance[i].size() > hauteurList && !(this.puissance[i].isEmpty())
-                        && i < this.colEnCours + 4) {
-                    if (this.puissance[i].get(hauteurList) == this.puissance[this.colEnCours].get(hauteurList)) {
-                        calculVictory += this.puissance[i].get(hauteurList); // verifie les cases vers la droite
-                        compteur--;
-                    } else {
-                        break;
-                    }
-                }
-            }
-            for (int i = this.colEnCours - 1; i >= this.colEnCours - compteur; i--) {
-                if (i >= 0) {
-                    if (this.puissance[i].size() > hauteurList && !(this.puissance[i].isEmpty())) {
-                        calculVictory += this.puissance[i].get(hauteurList); // verifie les cases vers la gauche
-                    }
-                }
-            }
-            if (calculVictory == 4 || calculVictory == 40) {
-                return true;
-            }
-            return false;
-        case 2:
-            for (int i = 0; i < 7; i += 3) {
-                calculVictory = 0;
-                for (int j = i; j < i + 3; j++) {
-                    calculVictory += this.morpion[j];
-                }
-                if (calculVictory == 3 || calculVictory == 30) {
-                    return true;
-                }
-            }
-            return false;
+            return this.verifVerticalMorpion() || this.verifHorizontalMorpion() || this.verifDiagonalMorpion();
         case 3:
             return this.pendu.verifChaine();
         default:
@@ -194,96 +113,192 @@ public class Plateau {
     }
 
     /**
-     * verifie les diagonales pour voir si la condition de victoire est atteinte
+     * verifie les colonnes du puissance 4 pour voir si la condition de victoire est
+     * atteinte
+     * 
+     * @return true si une colonne correspond sinon false
+     */
+    private boolean verifVertical() {
+        int calculVictory = 0;
+        int tailleLi = this.puissance[colEnCours].size() - 1;
+        if (tailleLi > 2 && !(this.puissance[colEnCours].isEmpty())) {
+            for (int i = tailleLi; i >= tailleLi - 3; i--) {
+                calculVictory += this.puissance[colEnCours].get(i);
+            }
+        }
+        if (calculVictory == 4 || calculVictory == 40) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * verifie les colonnes du morpion pour voir si la condition de victoire est
+     * atteinte
+     * 
+     * @return true si une colonne correspond sinon false
+     */
+    private boolean verifVerticalMorpion() {
+        int calculVictory;
+        for (int i = 0; i < 3; i++) {
+            calculVictory = 0;
+            for (int j = i; j <= i + 7; j += 3) {
+                calculVictory += this.morpion[j];
+            }
+            if (calculVictory == 3 || calculVictory == 30) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * verifie les lignes du puissance 4 pour voir si la condition de victoire est
+     * atteinte
+     * 
+     * @return true si une ligne correspond sinon false
+     */
+    private boolean verifHorizontal() {
+        int hauteurList = this.puissance[this.colEnCours].size() - 1;
+        int calculVictory = this.puissance[this.colEnCours].get(hauteurList);
+        int compteur = 3;
+        for (int i = this.colEnCours + 1; i < this.puissance.length; i++) {
+            if (this.puissance[i].size() > hauteurList && !(this.puissance[i].isEmpty()) && i < this.colEnCours + 4) {
+                if (this.puissance[i].get(hauteurList) == this.puissance[this.colEnCours].get(hauteurList)) {
+                    calculVictory += this.puissance[i].get(hauteurList); // verifie les cases vers la droite
+                    compteur--;
+                } else {
+                    break;
+                }
+            }
+        }
+        for (int i = this.colEnCours - 1; i >= this.colEnCours - compteur; i--) {
+            if (i >= 0) {
+                if (this.puissance[i].size() > hauteurList && !(this.puissance[i].isEmpty())) {
+                    calculVictory += this.puissance[i].get(hauteurList); // verifie les cases vers la gauche
+                }
+            }
+        }
+        if (calculVictory == 4 || calculVictory == 40) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * verifie les lignes du morpion pour voir si la condition de victoire est
+     * atteinte
+     * 
+     * @return true si une ligne correspond sinon false
+     */
+    private boolean verifHorizontalMorpion() {
+        int calculVictory;
+        for (int i = 0; i < 7; i += 3) {
+            calculVictory = 0;
+            for (int j = i; j < i + 3; j++) {
+                calculVictory += this.morpion[j];
+            }
+            if (calculVictory == 3 || calculVictory == 30) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * verifie les diagonales du puissance 4 pour voir si la condition de victoire
+     * est atteinte
      * 
      * @return true si une diagonales correspond sinon false
      */
     private boolean verifDiagonal() {
         int calculVictory = 0;
-        switch (this.typePlateau) {
-        case 1:
-            int hauteurList = this.puissance[this.colEnCours].size() - 1;
-            calculVictory = this.puissance[this.colEnCours].get(hauteurList);
-            int compteur = 3;
-            int j = hauteurList + 1;
-            for (int i = this.colEnCours + 1; i < this.puissance.length; i++) {
-                if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty()) && j < hauteurList + 4) {
-                    if (this.puissance[i].get(j) == this.puissance[this.colEnCours].get(hauteurList)) {
-                        calculVictory += this.puissance[i].get(j); // verifie les cases en haut a droite de la precedente
-                        compteur--;
-                        j++;
-                    } else {
-                        break;
-                    }
+        int hauteurList = this.puissance[this.colEnCours].size() - 1;
+        calculVictory = this.puissance[this.colEnCours].get(hauteurList);
+        int compteur = 3;
+        int j = hauteurList + 1;
+        for (int i = this.colEnCours + 1; i < this.puissance.length; i++) {
+            if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty()) && j < hauteurList + 4) {
+                if (this.puissance[i].get(j) == this.puissance[this.colEnCours].get(hauteurList)) {
+                    calculVictory += this.puissance[i].get(j); // verifie les cases en haut a droite de la precedente
+                    compteur--;
+                    j++;
                 } else {
                     break;
                 }
+            } else {
+                break;
             }
-            j = hauteurList - 1;
-            for (int i = this.colEnCours - 1; i >= this.colEnCours - compteur; i--) {
-                if (i >= 0 && j >= 0) {
-                    if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
-                        calculVictory += this.puissance[i].get(j); // verifie les cases en bas a gauche de la precedente
-                        j--;
-                    }
-                } else {
-                    break;
-                }
-            }
-            if (calculVictory == 4 || calculVictory == 40) {
-                return true;
-            }
-            calculVictory = this.puissance[this.colEnCours].get(hauteurList);
-            compteur = 3;
-            j = hauteurList - 1;
-            for (int i = this.colEnCours + 1; i < this.puissance.length; i++) {
-                if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty()) && j > hauteurList - 4 && j >= 0) {
-                    if (this.puissance[i].get(j) == this.puissance[this.colEnCours].get(hauteurList)) {
-                        calculVictory += this.puissance[i].get(j); // verifie les cases en bas a droite de la precedente
-                        compteur--;
-                        j--;
-                    } else {
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
-            j = hauteurList + 1;
-            for (int i = colEnCours - 1; i >= colEnCours - compteur; i--) {
-                if (i >= 0 && j < 6) {
-                    if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
-                        calculVictory += this.puissance[i].get(j); // verifie les cases en haut a gauche de la precedente
-                        j++;
-                    }
-                } else {
-                    break;
-                }
-            }
-            if (calculVictory == 4 || calculVictory == 40) {
-                return true;
-            }
-            return false;
-        case 2:
-            for (int i = 0; i < 9; i += 4) {
-                calculVictory += this.morpion[i];
-            }
-            if (calculVictory == 3 || calculVictory == 30) {
-                return true;
-            }
-            calculVictory = 0;
-            for (int i = 2; i < 7; i += 2) {
-                calculVictory += this.morpion[i];
-            }
-            if (calculVictory == 3 || calculVictory == 30) {
-                return true;
-            }
-            return false;
-        case 3:
-            return false;
-        default:
-            return false;
         }
+        j = hauteurList - 1;
+        for (int i = this.colEnCours - 1; i >= this.colEnCours - compteur; i--) {
+            if (i >= 0 && j >= 0) {
+                if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
+                    calculVictory += this.puissance[i].get(j); // verifie les cases en bas a gauche de la precedente
+                    j--;
+                }
+            } else {
+                break;
+            }
+        }
+        if (calculVictory == 4 || calculVictory == 40) {
+            return true;
+        }
+        calculVictory = this.puissance[this.colEnCours].get(hauteurList);
+        compteur = 3;
+        j = hauteurList - 1;
+        for (int i = this.colEnCours + 1; i < this.puissance.length; i++) {
+            if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty()) && j > hauteurList - 4 && j >= 0) {
+                if (this.puissance[i].get(j) == this.puissance[this.colEnCours].get(hauteurList)) {
+                    calculVictory += this.puissance[i].get(j); // verifie les cases en bas a droite de la precedente
+                    compteur--;
+                    j--;
+                } else {
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+        j = hauteurList + 1;
+        for (int i = colEnCours - 1; i >= colEnCours - compteur; i--) {
+            if (i >= 0 && j < 6) {
+                if (this.puissance[i].size() > j && !(this.puissance[i].isEmpty())) {
+                    calculVictory += this.puissance[i].get(j); // verifie les cases en haut a gauche de la precedente
+                    j++;
+                }
+            } else {
+                break;
+            }
+        }
+        if (calculVictory == 4 || calculVictory == 40) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * verifie les diagonales du morpion pour voir si la condition de victoire est
+     * atteinte
+     * 
+     * @return true si une diagonales correspond sinon false
+     */
+    private boolean verifDiagonalMorpion() {
+        int calculVictory = 0;
+        for (int i = 0; i < 9; i += 4) {
+            calculVictory += this.morpion[i];
+        }
+        if (calculVictory == 3 || calculVictory == 30) {
+            return true;
+        }
+        calculVictory = 0;
+        for (int i = 2; i < 7; i += 2) {
+            calculVictory += this.morpion[i];
+        }
+        if (calculVictory == 3 || calculVictory == 30) {
+            return true;
+        }
+        return false;
     }
 
     /**
