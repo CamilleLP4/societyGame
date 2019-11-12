@@ -424,7 +424,7 @@ public class IA {
         int randomP4;
         int tentative = 7;
         while (retour == 10) {
-            randomP4 = (int) (Math.random() * (100 - 1)) + 1;
+            randomP4 = (int) (Math.random() * (98)) + 1;
             if (randomP4 < 12) { // 11% de renvoye 1
                 retour = 1;
             } else if (randomP4 < 26) { // 14% de renvoye 2
